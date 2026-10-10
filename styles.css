@@ -1,0 +1,57 @@
+* { box-sizing:border-box;
+    margin: 0; 
+    padding: 0; }
+body { font-family: system-ui, Arial, sans-serif; 
+    max-width: 800px; 
+    margin: 0 auto; 
+    padding: 20px; 
+    line-height: 1.6; 
+    background: #f9fafb; color: #111; }
+header { margin-bottom: 24px; 
+    text-align: center; }
+h1 { color: #1f2937; }
+h2 { margin: 20px 0 12px; 
+    color: #374151; }
+section { background: white; 
+    padding: 16px; 
+    border-radius: 8px; 
+    margin-bottom: 16px; 
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+button { background: #2563eb; 
+    color: white; 
+    border: none; 
+    padding: 10px 16px; border-radius: 6px; cursor: pointer; }
+button:hover { background: #1d4ed8; }
+button:disabled { background: #9ca3af; 
+    cursor: not-allowed; }
+label { display: block; 
+    font-weight: 600; 
+    margin-bottom: 4px; }
+input, textarea { width: 100%; 
+    padding: 8px; 
+    border: 1px solid #d1d5db; 
+    border-radius: 6px; 
+    margin-bottom: 12px; }
+ul { list-style: none; }
+li { border: 1px solid #e5e7eb; 
+    padding: 12px; 
+    border-radius: 6px; 
+    margin-bottom: 10px; display: flex; justify-content: space-between; }
+#status { padding: 10px; 
+    border-radius: 6px; 
+    min-height: 20px; 
+    margin-top: 10px; }
+.status-loading { background: #dbeafe; 
+    color: #1e40af; 
+    border: 1px solid #93c5fd; }
+.status-success { background: #d1fae5; 
+    color: #065f46; 
+    border: 1px solid #6ee7b7; }
+.status-error { background: #fee2e2; 
+    color: #991b1b; 
+    border: 1px solid #fca5a5; }
+.status-empty { background: #fef3c7; 
+    color: #92400e; 
+    border: 1px solid #fcd34d; }
+.delete-btn { background: #ef4444; }
+.delete-btn:hover { background: #dc2626; }
