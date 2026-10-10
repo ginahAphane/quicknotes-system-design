@@ -1,6 +1,6 @@
 # QuickNotes System Design
 
-A simple, scalable notes app capstone for PLP. Client uses JSONPlaceholder API for GET/POST/DELETE with full loading/success/error/empty states.
+A simple, scalable notes app project 2 for PLP. Client uses JSONPlaceholder API for GET/POST/DELETE with full loading/success/error/empty states.
 
 ## Description
 QuickNotes lets users load 10 notes, create notes (title required, max 100 chars), and delete notes. Demonstrates API client best practices + system design docs.
