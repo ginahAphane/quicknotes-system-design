@@ -6,7 +6,7 @@ A simple, scalable notes app project 2 for PLP. Client uses JSONPlaceholder API 
 QuickNotes lets users load 10 notes, create notes (title required, max 100 chars), and delete notes. Demonstrates API client best practices + system design docs.
 
 ## How to Run the API Client
-1. Clone repo: `git clone https://github.com/your-username/quicknotes-system-design.git`
+1. Clone repo: `git clone https://github.com/ginahAphane/quicknotes-system-design.git`
 2. Open `index.html` in browser (or use Live Server).
 3. Click Load Notes, create note, delete note. No build needed.
 4. API URL: https://jsonplaceholder.typicode.com/posts
