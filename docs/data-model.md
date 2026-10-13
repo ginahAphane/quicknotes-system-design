@@ -1,27 +1,68 @@
-# Data Model
+# QuickNotes Data Model
 
-## Entity: Note
-- id: INT PK AUTO_INCREMENT
-- title: VARCHAR(100) NOT NULL
-- body: TEXT
-- userId: INT FK
-- created_at: TIMESTAMP DEFAULT NOW()
+We use PostgreSQL (Relational) because notes require ACID transactions, strong consistency for user data, and many-to-many joins for tagging which are inefficient in NoSQL. NoSQL would require denormalization and duplicate data.
 
-## SQL
-CREATE TABLE users (id INT PRIMARY KEY, email VARCHAR(255) UNIQUE);
-CREATE TABLE notes (
-  id INT PRIMARY KEY AUTO_INCREMENT,
-  title VARCHAR(100) NOT NULL,
-  body TEXT,
-  user_id INT,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (user_id) REFERENCES users(id)
+## Tables
+
+### users
+CREATE TABLE users (
+  id SERIAL PRIMARY KEY,
+  email VARCHAR(255) UNIQUE NOT NULL,
+  password_hash VARCHAR(255) NOT NULL,
+  created_at TIMESTAMP DEFAULT NOW()
 );
-CREATE INDEX idx_notes_user_created ON notes(user_id, created_at DESC);
-CREATE INDEX idx_notes_title ON notes(title);
+CREATE INDEX idx_users_email ON users(email);
 
-## Relationships
-User 1-N Notes. One user can have many notes.
+### notes
+CREATE TABLE notes (
+  id SERIAL PRIMARY KEY,
+  user_id INT REFERENCES users(id) ON DELETE CASCADE,
+  title VARCHAR(255) NOT NULL,
+  content TEXT NOT NULL,
+  created_at TIMESTAMP DEFAULT NOW(),
+  updated_at TIMESTAMP DEFAULT NOW()
+);
+CREATE INDEX idx_notes_user_id ON notes(user_id);
+CREATE INDEX idx_notes_created_at ON notes(created_at);
 
-## Justification
-VARCHAR(100) enforces max 100 validation. Index on created_at for fast loading of recent 10 notes. Index on title for search.
+### tags
+CREATE TABLE tags (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(50) UNIQUE NOT NULL,
+  created_at TIMESTAMP DEFAULT NOW()
+);
+CREATE INDEX idx_tags_name ON tags(name);
+
+### note_tags (Join Table for Many-to-Many)
+CREATE TABLE note_tags (
+  note_id INT REFERENCES notes(id) ON DELETE CASCADE,
+  tag_id INT REFERENCES tags(id) ON DELETE CASCADE,
+  PRIMARY KEY (note_id, tag_id)
+);
+CREATE INDEX idx_note_tags_note_id ON note_tags(note_id);
+CREATE INDEX idx_note_tags_tag_id ON note_tags(tag_id);
+
+## Sample SQL Queries
+
+1. Get all notes for a user with their tags:
+SELECT n.id, n.title, t.name as tag_name
+FROM notes n
+LEFT JOIN note_tags nt ON n.id = nt.note_id
+LEFT JOIN tags t ON nt.tag_id = t.id
+WHERE n.user_id = 1;
+
+2. Get all notes that have tag 'work':
+SELECT n.*
+FROM notes n
+JOIN note_tags nt ON n.id = nt.note_id
+JOIN tags t ON nt.tag_id = t.id
+WHERE t.name = 'work' AND n.user_id = 1;
+
+3. Count notes per tag:
+SELECT t.name, COUNT(nt.note_id) as note_count
+FROM tags t
+JOIN note_tags nt ON t.id = nt.tag_id
+GROUP BY t.name;
+
+## Trade-off Analysis: Relational vs NoSQL
+Relational (PostgreSQL) is better because: 1) Strong relationships between users, notes, tags. 2) Need for JOINs. 3) ACID for data integrity. 4) Easy indexing. NoSQL (like MongoDB) would need to embed tags array in note document causing duplication and harder tag renaming. Relational avoids duplication via normalized join table.
