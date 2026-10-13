@@ -48,7 +48,8 @@ async function loadNotes() {
 }
 
 // POST create
-async function createNote(title, body) {
+async function createNote(title, body) 
+statusElement.textContent = `Created! Status: ${response.status}, New ID: ${data.id}`;{
   setLoading(true);
   setStatus("Creating note...", "loading");
   try {
