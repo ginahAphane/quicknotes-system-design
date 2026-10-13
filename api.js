@@ -65,7 +65,9 @@ async function createNote(title, body) {
   } finally {
     setLoading(false);
   }
-}
+}// This handles IDs created locally vs JSONPlaceholder: JSONPlaceholder only persists IDs 1-100.
+// If ID > 100 (locally created), we delete from local state/UI only, as mock API will return 404 but we still show success.
+async function deleteNote(id) { ... }
 
 // DELETE
 async function deleteNote(id, liElement) {
